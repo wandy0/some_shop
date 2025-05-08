@@ -64,10 +64,11 @@
            $products = $category_handler->findProductsInCategories($qb, $categories,
                     $absolute_similarity, $filters, $sort);
             foreach ($products as $product){
-                array_push($response,["uuid"=>$product->getUuid(),
-                              "info"=>$product->getInfo(),
-                              "category"=>$product->getCategory()->getUuid(),
-                              "Price"=> $product->getPrice()->getPrice()]);
+                array_push($response,["uuid"=>$product['product']->getUuid(),
+                              "info"=>$product['product']->getInfo(),
+                              "category"=>$product['product']->getCategory()->getUuid(),
+                              "price"=> $product['product']->getPrice()->getPrice(),
+                              "count"=>$product['itemcount']]);
             }
            return new JsonResponse($response);
        }

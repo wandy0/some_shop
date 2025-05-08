@@ -17,9 +17,15 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
+           # - '../src/Entity/'
             - '../src/Kernel.php'
-    Doctrine\ORM\EntityManagerInterface: '@doctrine.orm.entity_manager'
+    App\ResettableEntityManager:
+        class: Doctrine\ORM\EntityManagerInterface
+        factory: ['@doctrine', 'getManager']
+        tags:
+            - { name: kernel.reset, method: clear }
+
+    Doctrine\ORM\EntityManagerInterface: '@App\ResettableEntityManager'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

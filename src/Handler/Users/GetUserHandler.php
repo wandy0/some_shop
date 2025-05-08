@@ -24,7 +24,8 @@ class GetUserHandler extends AbstractController{
                      ->getOneOrNullResult();
         if ($user){
             return json_encode(["uuid"=>$user->getUuid(),
-                                "info"=>$user->getInfo(),]);
+                                "info"=>$user->getInfo(),
+                                "balance"=>$user->getBalance()]);
         }
         else{
             return json_encode(["error"=>404]);

@@ -6,6 +6,7 @@ use Doctrine\ORM\Query\Expr\Orx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\Item;
 class GetCategoryHandler extends AbstractController{
     private EntityManagerInterface $entityManager;
 
@@ -74,8 +75,9 @@ class GetCategoryHandler extends AbstractController{
              ?array $filters, ?array $sort) {
         
         $categoryUuids = array_map(fn($category) => $category->uuid, $categories);
-           $qb->select('p')
+           $qb->select('p as product',"count(i.uuid) as itemcount")
               ->from(Product::class, 'p')
+              ->leftjoin(Item::class,"i",'with','i.product = p')
               ->join('p.category', 'c')
               ->andWhere($qb->expr()->in('c.uuid', ':categoryUuids'))
               ->setParameter('categoryUuids', $categoryUuids);
@@ -116,12 +118,12 @@ class GetCategoryHandler extends AbstractController{
                     else{
                         $target = end($exploded_path);
                         $path= str_replace("." . $target, "", $path);
-                        print_r($path . "/" . $target);
                         $qb->addOrderBy("JSON_GET_FIELD_AS_TEXT($path,'$target')",$order);
                                 
                     }
                 }
             }
+     $qb->groupBy('p.uuid');
      return $qb->getQuery()->getResult();
     }
 }

@@ -15,12 +15,13 @@ class Order
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?UuidInterface $uuid;
     
-    #[ORM\Column(type: "json", nullable: true)]
-    private ?array $info = [];
-    
     #[ORM\ManyToOne(targetEntity: Cart::class)]
     #[ORM\JoinColumn(name: "cart_uuid", referencedColumnName: "uuid", onDelete: "CASCADE")]
     private ?Cart $cart = null;
+    
+    #[ORM\ManyToOne(targetEntity: OrderStatus::class)]
+    #[ORM\JoinColumn(name: "status", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?OrderStatus $status = null;
 
     public function getUuid(): UuidInterface
     {
@@ -31,14 +32,14 @@ class Order
     {
         return $this->cart;
     }
-    public function getInfo(): ?array
+    public function getStatus(): ?OrderStatus
     {
-        return $this->info;
+        return $this->status;
     }
 
-    public function setInfo(array $chars): void
+    public function setStaus(OrderStatus $status): void
     {
-        $this->info = $chars;
+        $this->status = $status;
     }
     public function setCart(Cart $cart): void
     {

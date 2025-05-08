@@ -1,5 +1,7 @@
 doctrine:
     dbal:
+        driver: 'pdo_pgsql'
+        server_version: '17.4'
         url: '%env(resolve:DATABASE_URL)%'
         types:
             uuid: Ramsey\Uuid\Doctrine\UuidType

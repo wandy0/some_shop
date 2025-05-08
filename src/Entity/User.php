@@ -22,6 +22,9 @@ class User
     #[ORM\JoinColumn(name: "role_uuid", referencedColumnName: "uuid")]
     private ?Role $role = null;
     
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $balance = null;
+    
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
@@ -36,7 +39,15 @@ class User
     {
         $this->info = $chars;
     }
-    
+    public function getBalance(): ?int
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(int $balance): void
+    {
+        $this->balance = $balance;
+    }
     public function getRole(): ?Role
     {
         return $this->price;
